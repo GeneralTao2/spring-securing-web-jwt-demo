@@ -1,24 +1,23 @@
 package com.example.securingweb.model;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import com.example.securingweb.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class MyUserDetails implements UserDetails {
+import java.util.Arrays;
+import java.util.Collection;
 
-    private User user;
+public class UserDetailsImpl implements UserDetails {
 
-    public MyUserDetails(User user) {
+    private final User user;
+
+    public UserDetailsImpl(User user) {
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
         return Arrays.asList(authority);
     }
 

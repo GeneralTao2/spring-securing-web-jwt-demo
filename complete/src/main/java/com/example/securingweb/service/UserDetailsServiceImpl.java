@@ -1,13 +1,15 @@
 package com.example.securingweb.service;
 
-import com.example.securingweb.repository.UserRepository;
-import com.example.securingweb.model.MyUserDetails;
 import com.example.securingweb.model.User;
+import com.example.securingweb.model.UserDetailsImpl;
+import com.example.securingweb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
@@ -22,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Could not find user");
         }
 
-        return new MyUserDetails(user);
+        return new UserDetailsImpl(user);
     }
 
 }

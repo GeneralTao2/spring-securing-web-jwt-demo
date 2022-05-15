@@ -1,5 +1,6 @@
 package com.example.securingweb.config;
 
+import com.example.securingweb.model.Role;
 import com.example.securingweb.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,9 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.example.securingweb.config.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
 import static com.example.securingweb.config.Constants.SIGNING_KEY;
@@ -21,6 +25,15 @@ public class JwtTokenUtil implements Serializable {
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public List<SimpleGrantedAuthority> getRoleFromToken(String token) {
+        ArrayList<LinkedHashMap<String, String>> scopes = getClaimFromToken(token, claims -> claims.get("scopes", ArrayList.class));
+        System.out.println(scopes);
+        return scopes.stream()
+                .flatMap(scope -> scope.values().stream())
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     public Date getExpirationDateFromToken(String token) {
@@ -45,19 +58,19 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(User user) {
-        return doGenerateToken(user.getUsername());
+        return doGenerateToken(user.getUsername(), user.getRole());
     }
 
-    private String doGenerateToken(String subject) {
+    private String doGenerateToken(String subject, Role role) {
 
         Claims claims = Jwts.claims().setSubject(subject);
-        claims.put("scopes", Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        claims.put("scopes", List.of(new SimpleGrantedAuthority(role.toString())));
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuer("http://devglan.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
                 .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
                 .compact();
     }
