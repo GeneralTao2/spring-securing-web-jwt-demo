@@ -31,11 +31,11 @@ public class AuthenticationController {
     @PostMapping(value = "/login")
     public ApiResponse register(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
-        authenticationManager.authenticate(
+        /*authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getUsername(),
                         loginUser.getPassword())
-        );
+        );*/
         final User user = userRepository.findByUsername(loginUser.getUsername()).orElseThrow();
         final String token = jwtTokenUtil.generateToken(user);
         return new ApiResponse(200, "success", new AuthToken(token, user.getUsername()));
