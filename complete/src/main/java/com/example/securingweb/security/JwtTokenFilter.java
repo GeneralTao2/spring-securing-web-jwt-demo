@@ -20,11 +20,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     JwtUserDataValidator jwtUserDataValidator;
     UserDetailsAuthenticator userDetailsAuthenticator;
 
+    //TODO: do something with warnings
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         JwtUserData jwtUserData = jwtUserDataDecoder.decode(req.getHeader(HEADER_STRING));
 
-        if(jwtUserDataValidator.validate(jwtUserData)) {
+        if (jwtUserDataValidator.validate(jwtUserData)) {
             userDetailsAuthenticator.authenticate(jwtUserData, req);
         }
 

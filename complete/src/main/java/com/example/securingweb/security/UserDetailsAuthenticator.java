@@ -27,7 +27,9 @@ public class UserDetailsAuthenticator {
                 new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+
         logger.info("authenticated user " + userDetails.getUsername() + ", setting security context");
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

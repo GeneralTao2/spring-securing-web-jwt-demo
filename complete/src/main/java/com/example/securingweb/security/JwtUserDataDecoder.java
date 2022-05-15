@@ -21,12 +21,11 @@ public class JwtUserDataDecoder {
     protected final Log logger = LogFactory.getLog(getClass());
 
     public JwtUserData decode(String rawToken) {
-        String authToken = null;
         String email = null;
         List<SimpleGrantedAuthority> roles = null;
 
         if (rawToken != null && rawToken.startsWith(TOKEN_PREFIX)) {
-            authToken = rawToken.replace(TOKEN_PREFIX, "");
+            String authToken = rawToken.replace(TOKEN_PREFIX, "");
             try {
                 email = jwtTokenUtil.getUsernameFromToken(authToken);
                 roles = jwtTokenUtil.getRoleFromToken(authToken);
@@ -42,22 +41,5 @@ public class JwtUserDataDecoder {
         }
 
         return new JwtUserData(email, roles);
-//
-//
-//        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//
-//            if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-//                //Role role = jwtTokenUtil.getRoleFromToken(authToken);
-//                // todo catch
-//                UsernamePasswordAuthenticationToken authentication =
-//                        new UsernamePasswordAuthenticationToken(userDetails, null,
-//                                roles);
-//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-//                logger.info("authenticated user " + email + ", setting security context");
-//                SecurityContextHolder.getContext().setAuthentication(authentication);
-//            }
-//        }
     }
 }

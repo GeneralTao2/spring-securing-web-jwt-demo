@@ -9,8 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthToken {
-
+public class LoginResponse {
     private String token;
     private String role;
 }

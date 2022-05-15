@@ -14,22 +14,23 @@ public class JwtUserDataValidator {
 
     boolean validate(JwtUserData jwtUserData) {
 
-        if(jwtUserData.getEmail() == null) {
+        if (jwtUserData.getEmail() == null) {
             return false;
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUserData.getEmail());
 
-         // todo validate properly
-        if(userDetails == null) {
+        // todo validate properly
+        if (userDetails == null) {
             return false;
         }
 
-        if(!jwtUserData.getRoles().containsAll(userDetails.getAuthorities())) {
+        //TODO: do something with warning
+        if (!jwtUserData.getRoles().containsAll(userDetails.getAuthorities())) {
             return false;
         }
 
-        if(SecurityContextHolder.getContext().getAuthentication() != null) {
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
             return false;
         }
 

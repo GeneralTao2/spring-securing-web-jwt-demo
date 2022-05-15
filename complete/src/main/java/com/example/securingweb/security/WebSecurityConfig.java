@@ -18,9 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		securedEnabled = true,
-		jsr250Enabled = true,
-		prePostEnabled = true
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
 )
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -36,7 +36,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/login").permitAll()
+                .antMatchers(
+                        "/",
+                        "/home",
+                        "/login",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html"
+                ).permitAll()
                 // TODO make like here https://www.toptal.com/spring/spring-security-tutorial
                 .antMatchers("/hey").hasAuthority(Role.USER.toString())
                 .antMatchers("/yo").hasAuthority(Role.ADMIN.toString())

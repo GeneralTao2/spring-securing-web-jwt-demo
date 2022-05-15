@@ -27,8 +27,10 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
+    //TODO: do something with warning
     public List<SimpleGrantedAuthority> getRoleFromToken(String token) {
-        ArrayList<LinkedHashMap<String, String>> scopes = getClaimFromToken(token, claims -> claims.get("scopes", ArrayList.class));
+        ArrayList<LinkedHashMap<String, String>> scopes =
+                getClaimFromToken(token, claims -> claims.get("scopes", ArrayList.class));
         System.out.println(scopes);
         return scopes.stream()
                 .flatMap(scope -> scope.values().stream())
@@ -68,8 +70,8 @@ public class JwtTokenUtil implements Serializable {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuer("http://devglan.com")
-                .setIssuedAt(new Date(System.currentTimeMillis()))
+                //.setIssuer("http://devglan.com")
+                //.setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
                 .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
                 .compact();
