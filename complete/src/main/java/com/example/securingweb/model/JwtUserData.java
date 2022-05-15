@@ -11,6 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 public class JwtUserData {
-    String username;
+    String email;
     List<SimpleGrantedAuthority> roles;
 }

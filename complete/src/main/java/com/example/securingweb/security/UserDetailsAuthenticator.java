@@ -1,4 +1,4 @@
-package com.example.securingweb.config;
+package com.example.securingweb.security;
 
 import com.example.securingweb.model.JwtUserData;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class UserDetailsAuthenticator {
     protected final Log logger = LogFactory.getLog(getClass());
 
     void authenticate(JwtUserData jwtUserData, HttpServletRequest req) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUserData.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUserData.getEmail());
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null,

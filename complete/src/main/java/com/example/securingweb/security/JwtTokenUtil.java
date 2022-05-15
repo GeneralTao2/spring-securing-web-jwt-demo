@@ -1,4 +1,4 @@
-package com.example.securingweb.config;
+package com.example.securingweb.security;
 
 import com.example.securingweb.model.Role;
 import com.example.securingweb.model.User;
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.example.securingweb.config.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
-import static com.example.securingweb.config.Constants.SIGNING_KEY;
+import static com.example.securingweb.security.JwtConstants.ACCESS_TOKEN_VALIDITY_SECONDS;
+import static com.example.securingweb.security.JwtConstants.SIGNING_KEY;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -58,7 +58,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(User user) {
-        return doGenerateToken(user.getUsername(), user.getRole());
+        return doGenerateToken(user.getEmail(), user.getRole());
     }
 
     private String doGenerateToken(String subject, Role role) {

@@ -1,4 +1,4 @@
-package com.example.securingweb.config;
+package com.example.securingweb.security;
 
 import com.example.securingweb.model.Role;
 import lombok.AllArgsConstructor;
@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         );
     }
 
+    //todo how does it works
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

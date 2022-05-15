@@ -1,4 +1,4 @@
-package com.example.securingweb.config;
+package com.example.securingweb.security;
 
 import com.example.securingweb.model.JwtUserData;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -6,17 +6,12 @@ import io.jsonwebtoken.SignatureException;
 import lombok.AllArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.example.securingweb.config.Constants.TOKEN_PREFIX;
+import static com.example.securingweb.security.JwtConstants.TOKEN_PREFIX;
 
 @AllArgsConstructor
 @Component
@@ -27,16 +22,16 @@ public class JwtUserDataDecoder {
 
     public JwtUserData decode(String rawToken) {
         String authToken = null;
-        String username = null;
+        String email = null;
         List<SimpleGrantedAuthority> roles = null;
 
         if (rawToken != null && rawToken.startsWith(TOKEN_PREFIX)) {
             authToken = rawToken.replace(TOKEN_PREFIX, "");
             try {
-                username = jwtTokenUtil.getUsernameFromToken(authToken);
+                email = jwtTokenUtil.getUsernameFromToken(authToken);
                 roles = jwtTokenUtil.getRoleFromToken(authToken);
             } catch (IllegalArgumentException e) {
-                logger.error("an error occured during getting username from token", e);
+                logger.error("an error occured during getting email from token", e);
             } catch (ExpiredJwtException e) {
                 logger.warn("the token is expired and not valid anymore", e);
             } catch (SignatureException e) {
@@ -46,12 +41,12 @@ public class JwtUserDataDecoder {
             logger.warn("couldn't find bearer string, will ignore the token");
         }
 
-        return new JwtUserData(username, roles);
+        return new JwtUserData(email, roles);
 //
 //
-//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 //
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+//            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 //
 //            if (jwtTokenUtil.validateToken(authToken, userDetails)) {
 //                //Role role = jwtTokenUtil.getRoleFromToken(authToken);
@@ -60,7 +55,7 @@ public class JwtUserDataDecoder {
 //                        new UsernamePasswordAuthenticationToken(userDetails, null,
 //                                roles);
 //                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-//                logger.info("authenticated user " + username + ", setting security context");
+//                logger.info("authenticated user " + email + ", setting security context");
 //                SecurityContextHolder.getContext().setAuthentication(authentication);
 //            }
 //        }

@@ -1,6 +1,6 @@
 package com.example.securingweb.controller;
 
-import com.example.securingweb.config.JwtTokenUtil;
+import com.example.securingweb.security.JwtTokenUtil;
 import com.example.securingweb.model.ApiResponse;
 import com.example.securingweb.model.AuthToken;
 import com.example.securingweb.model.LoginUser;
@@ -8,7 +8,6 @@ import com.example.securingweb.model.User;
 import com.example.securingweb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +35,9 @@ public class AuthenticationController {
                         loginUser.getUsername(),
                         loginUser.getPassword())
         );*/
-        final User user = userRepository.findByUsername(loginUser.getUsername()).orElseThrow();
+        final User user = userRepository.findByEmail(loginUser.getEmail()).orElseThrow();
         final String token = jwtTokenUtil.generateToken(user);
-        return new ApiResponse(200, "success", new AuthToken(token, user.getUsername()));
+        return new ApiResponse(200, "success", new AuthToken(token, user.getEmail()));
     }
 
 

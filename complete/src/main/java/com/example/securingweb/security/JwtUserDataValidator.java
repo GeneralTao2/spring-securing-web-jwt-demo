@@ -1,4 +1,4 @@
-package com.example.securingweb.config;
+package com.example.securingweb.security;
 
 import com.example.securingweb.model.JwtUserData;
 import lombok.AllArgsConstructor;
@@ -14,11 +14,11 @@ public class JwtUserDataValidator {
 
     boolean validate(JwtUserData jwtUserData) {
 
-        if(jwtUserData.getUsername() == null) {
+        if(jwtUserData.getEmail() == null) {
             return false;
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUserData.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUserData.getEmail());
 
          // todo validate properly
         if(userDetails == null) {
